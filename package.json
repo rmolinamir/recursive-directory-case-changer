@@ -1,7 +1,24 @@
 {
   "name": "recursive-directory-case-changer",
   "version": "0.1.0",
-  "private": false,
+  "keywords": [
+    "recursive",
+    "directory",
+    "case changer",
+    "file case",
+    "directory case",
+    "case conversion",
+    "case transformation",
+    "file management",
+    "directory management",
+    "file organization",
+    "directory organization",
+    "file case conversion",
+    "directory case conversion",
+    "case manipulation",
+    "file case manipulation",
+    "directory case manipulation"
+  ],
   "publishConfig": {
     "access": "public",
     "registry": "https://registry.npmjs.org/"
