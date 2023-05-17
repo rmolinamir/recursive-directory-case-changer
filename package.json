@@ -1,6 +1,6 @@
 {
   "name": "recursive-directory-case-changer",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "private": false,
   "publishConfig": {
     "access": "public",
@@ -14,7 +14,9 @@
   "bin": {
     "rdcc": "./dist/cli.js"
   },
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "exports": {
