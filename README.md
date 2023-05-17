@@ -2,14 +2,18 @@
 
 A simple script to change the case of all files and directories in a directory recursively.
 
+## Warning ⚠️
+
+It is recommended to back up your directory before using this script.
+
 ## Example
 
 ### npx
 
 ```bash
-npx recursive-directory-case-changer -c kebab-case -a .private/lib
+npx recursive-directory-case-changer -c kebab-case -a true src/ lib/
 
-Changing case of directories: true, .private/lib
+Changing case of directories: src, lib
 ```
 
 ### npm
@@ -17,9 +21,9 @@ Changing case of directories: true, .private/lib
 ```bash
 npm i -g recursive-directory-case-changer
 
-rdcc -c kebab-case -a src/
+rdcc -c kebab-case -a true src/ lib/
 
-Changing case of directories: true, .private/lib
+Changing case of directories: src, lib
 ```
 
 ## Usage
