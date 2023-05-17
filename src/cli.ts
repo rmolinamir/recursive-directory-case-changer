@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import assert from 'assert';
-import { program } from 'commander';
+import { Option, program } from 'commander';
 import fs from 'fs-extra';
+import path from 'path';
 
 import { CaseType } from './case-type';
 import { recursiveDirectoryCaseChanger } from './recursive-directory-case-changer';
@@ -17,36 +17,34 @@ function validateDirs(dirs: unknown): asserts dirs is string[] {
   if (!dirs.length) throw new Error('Dirs is empty.');
 }
 
-function validateOptions(
-  options: Record<string, any>
-): asserts options is Options {
+function processOptions(options: Record<string, string>): Options {
   if (!options.caseType) throw new Error('Case type not specified.');
 
-  assert(
-    Object.values(CaseType).includes(options.caseType),
-    `Case type {${
-      options.caseType
-    }} is not supported. The supported case types are: ${Object.values(
-      CaseType
-    ).join(', ')}.`
-  );
-
-  if (options.shouldAdjustImportAndExportStatements)
-    assert(
-      typeof options.shouldAdjustImportAndExportStatements === 'boolean',
-      'Adjust import and export statements must be a boolean.'
-    );
+  return {
+    caseType: options.caseType as CaseType,
+    shouldAdjustImportAndExportStatements:
+      options.shouldAdjustImportAndExportStatements === 'true'
+  };
 }
 
 program
   .version('0.0.0')
-  .command(__filename, { isDefault: true })
-  .requiredOption('-c, --case-type <caseType>', 'Case type to change to.')
-  .option('-a, --adjust', 'Adjust import and export statements.', true)
+  .command('execute', { isDefault: true })
+  .addOption(
+    new Option('-c, --case-type <caseType>', 'Case type to change to.')
+      .choices(Object.values(CaseType))
+      .default(CaseType.KebabCase)
+  )
+  .addOption(
+    new Option('-a, --adjust <boolean>', 'Adjust import and export statements.')
+      .choices(['true', 'false'])
+      .default('true')
+  )
   .argument('<dirs...>')
-  .action(async function (dirs: string[], options: Options) {
+  .action(async function (dirs: string[], opts: Record<string, string>) {
     validateDirs(dirs);
-    validateOptions(options);
+
+    const options = processOptions(opts);
 
     console.info('Changing case of directories: %s', dirs.join(', '));
 
@@ -55,13 +53,14 @@ program
         if (!fs.existsSync(dir))
           return console.error('Directory %s does not exist.', dir);
         else
-          return recursiveDirectoryCaseChanger(options.caseType, dir).catch(
-            (err) => console.error(err)
-          );
+          return recursiveDirectoryCaseChanger(
+            options.caseType,
+            path.resolve(dir)
+          )
+            .then(() => console.info('Done.'))
+            .catch((err) => console.error('Something went wrong: ', err));
       })
     );
-
-    console.info('Done.');
   });
 
 program.parse(process.argv);

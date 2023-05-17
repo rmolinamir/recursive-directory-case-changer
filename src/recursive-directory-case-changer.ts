@@ -21,11 +21,17 @@ export async function recursiveDirectoryCaseChanger(
       currentPath = path.join(dirent.path, dirent.name);
       newPath = path.join(dirent.path, kebabDirName);
 
-      if (currentPath !== newPath) {
-        if (fs.existsSync(newPath)) await fs.rm(newPath, { recursive: true });
+      if (currentPath !== newPath)
+        // Try to rename the directory. If it fails, it's probably because the
+        // directory already exists. In that case, delete the existing directory
+        // and try again.
+        try {
+          await fs.rename(currentPath, newPath);
+        } catch {
+          if (fs.existsSync(newPath)) await fs.rm(newPath, { recursive: true });
 
-        await fs.rename(currentPath, newPath);
-      }
+          await fs.rename(currentPath, newPath);
+        }
 
       await recursiveDirectoryCaseChanger(caseType, newPath);
     } else {

@@ -38,3 +38,6 @@ yarn-error.log*
 
 # tmp files
 tmp
+
+# private
+.private
