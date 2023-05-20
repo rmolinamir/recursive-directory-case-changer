@@ -6,6 +6,7 @@ import { CaseType } from '../../case-type';
 import { adjustImportAndExportStatements } from '../adjust-import-and-export-statements';
 
 const file = `
+import ScopedFoo from '@scope/foo/Bar';
 import fs from 'fs-extra';
 import path from 'path';
 
@@ -18,6 +19,7 @@ import { Foo as Bar, Baz, Qux } from '../Foo_Bar_Baz';
 import Foobar from '../Foobar';`;
 
 const adjustedFile = `
+import ScopedFoo from '@scope/foo/bar';
 import fs from 'fs-extra';
 import path from 'path';
 

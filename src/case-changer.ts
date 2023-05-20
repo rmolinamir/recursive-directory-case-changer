@@ -15,6 +15,9 @@ export class CaseChanger {
   }
 
   public static kebabCase(str: string): string {
-    return dashify(str).replace(/_/g, '-');
+    const hasLeadingAtSign = str.startsWith('@');
+    const transformedStr = dashify(str).replace(/_/g, '-');
+    if (hasLeadingAtSign) return `@${transformedStr}`;
+    else return transformedStr;
   }
 }
